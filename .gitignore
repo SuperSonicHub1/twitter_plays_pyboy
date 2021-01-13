@@ -3,6 +3,9 @@
 # Super Mario Land ROM
 test_rom.gb
 
+# VS Code
+.vscode
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
