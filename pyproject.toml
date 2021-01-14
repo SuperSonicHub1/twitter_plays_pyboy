@@ -3,6 +3,7 @@ name = "twitter_plays_pyboy"
 version = "0.1.0"
 description = ""
 authors = ["Kyle Anthony Williams <kyle.anthony.williams2@gmail.com>"]
+license = "Unlicense"
 
 [tool.poetry.dependencies]
 python = "^3.7"
