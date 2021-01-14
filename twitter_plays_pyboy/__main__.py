@@ -1,23 +1,28 @@
 from pyboy import PyBoy, WindowEvent
 from PIL import Image
+from argparse import ArgumentParser
 from typing import List
-from .constants import BUTTON_INPUTS
+import twitter_plays_pyboy
 
+parser = ArgumentParser(
+    prog="Twitter Plays Game Boy",
+    description="A clone of Constantin Liétard's 'Twitter Plays Pokémon' (https://nitter.net/screenshakes/status/1347589296593788933). Powered by PyBoy (https://github.com/Baekalfen/PyBoy)."
+)
+parser.add_argument('filename', help="Location of ROM.")
+parser.add_argument('-g', '--game', help="Game class used. If you're unsure what to use, pick `BaseGame`.", default="BaseGame", choices=twitter_plays_pyboy.games.__all__)
 
-filename = "test_rom.gb"
+args = parser.parse_args()
+
+engine = getattr(twitter_plays_pyboy.games, args.game)
 
 # Initialize emulator
-emu = PyBoy(filename, window_type="headless", window_scale=3, debug=False, game_wrapper=True)
+emu = PyBoy(args.filename, window_type="headless", debug=False, game_wrapper=True)
 emu.set_emulation_speed(0)
 
-mario = emu.game_wrapper()
-mario.start_game()
+game = engine(emu)
 
-# Used for numbering screenshots
-n = 0
+last_bio = ""
 while True:
-    n+=1
-
     # Get window events
     inputs: List[WindowEvent] = []
     button = input("> ").lower()
@@ -25,17 +30,20 @@ while True:
         emu.stop()
         exit(0)
     else:
-        inputs = BUTTON_INPUTS.get(button, [])
+        inputs = twitter_plays_pyboy.constants.BUTTON_INPUTS.get(button, [])
         if not inputs:
             continue
     press, release = inputs
     
-    # Press button for three frames
-    emu.send_input(press)
-    for _ in range(3):
-        emu.tick()
-    emu.send_input(release)
+    # Send input
+    game.input(press, release)
+
+    if last_bio == game.bio():
+        pass
+    else:
+        last_bio = game.bio()
+        print(last_bio)
 
     # Get screenshot
-    with emu.botsupport_manager().screen().screen_image() as screenshot:
+    with game.screenshot() as screenshot:
         screenshot.save(f"test_images/{1}.jpg", "JPEG")
