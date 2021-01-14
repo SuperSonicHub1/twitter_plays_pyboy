@@ -1,7 +1,12 @@
 # Considering using a config system, put that here
 
+# Test image folder
+test_images/
+
 # Super Mario Land ROM
 test_rom.gb
+test_rom.gb.ram
+test_rom.gb.state
 
 # VS Code
 .vscode

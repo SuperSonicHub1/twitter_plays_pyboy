@@ -11,6 +11,8 @@ Pillow = "^8.1.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+mypy = "^0.790"
+black = {version = "^20.8b1", allow-prereleases = true}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
