@@ -1,4 +1,3 @@
 __version__ = '0.1.0'
 
-from . import constants
-from . import games
+from . import constants, games

@@ -10,6 +10,8 @@ parser = ArgumentParser(
 )
 parser.add_argument('filename', help="Location of ROM.")
 parser.add_argument('-g', '--game', help="Game class used. If you're unsure what to use, pick `BaseGame`.", default="BaseGame", choices=twitter_plays_pyboy.games.__all__)
+parser.add_argument('-V', '--version', action='version', version='%(prog)s ' + twitter_plays_pyboy.__version__)
+
 
 args = parser.parse_args()
 
