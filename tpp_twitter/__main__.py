@@ -5,7 +5,7 @@ from typing import List
 import twitter_plays_pyboy
 
 parser = ArgumentParser(
-    prog="TPP Test",
+    prog="Twitter Plays Game Boy",
     description="A clone of Constantin Liétard's 'Twitter Plays Pokémon' (https://nitter.net/screenshakes/status/1347589296593788933). Powered by PyBoy (https://github.com/Baekalfen/PyBoy)."
 )
 parser.add_argument('filename', help="Location of ROM.")
@@ -48,4 +48,5 @@ while True:
 
     # Get screenshot
     with game.screenshot() as screenshot:
-        screenshot.save("test_images/1.jpg", "JPEG")
+        screenshot.save(f"test_images/{1}.jpg", "JPEG")
+
