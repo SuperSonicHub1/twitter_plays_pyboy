@@ -1,8 +1,12 @@
 from PIL import Image
 from pyboy import PyBoy, WindowEvent
+import schedule
 from argparse import ArgumentParser
+from io import BytesIO
+import time
 from typing import List
 import twitter_plays_pyboy
+import tpp_twitter as twitter
 
 parser = ArgumentParser(
     prog="Twitter Plays Game Boy",
@@ -24,30 +28,32 @@ emu.set_emulation_speed(0)
 
 game = engine(emu)
 
-last_bio = ""
-while True:
-    # Get window events
-    inputs: List[WindowEvent] = []
-    button = input("> ").lower()
-    if button == "q":
-        emu.stop()
-        exit(0)
-    else:
+def job():
+    for status in twitter.get_replies_from_latest():
+        button = status.text.split(" | ", 1)[0]
         inputs = twitter_plays_pyboy.constants.BUTTON_INPUTS.get(button, [])
         if not inputs:
             continue
-    press, release = inputs
-    
-    # Send input
-    game.input(press, release)
-
-    if last_bio == game.bio():
-        pass
+        press, release = inputs
+        game.input(press, release)
     else:
-        last_bio = game.bio()
-        print(last_bio)
+        inputs = twitter_plays_pyboy.constants.BUTTON_INPUTS['pass']
+        press, release = inputs
+        game.input(press, release)
 
-    # Get screenshot
     with game.screenshot() as screenshot:
-        screenshot.save(f"test_images/{1}.jpg", "JPEG")
+        screenshot_bin = BytesIO()
+        screenshot.save(screenshot_bin, "JPEG")
+    
+    twitter.update(screenshot_bin, BytesIO(screenshot_bin.getvalue()), text="", bio=game.bio())
+
+schedule.every(30).seconds.do(job)
+
+while True:
+    try:
+        schedule.run_pending()
+        time.sleep(1)
+    except KeyboardInterrupt:
+        game.emu.stop()
+        exit(0)
 

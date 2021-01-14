@@ -13,8 +13,9 @@ auth.set_access_token(getenv('TWITTER_ACCESS'), getenv('TWITTER_ACCESS_TOKEN'))
 api = tweepy.API(auth)
 
 def get_replies_from_latest():
+    """Gathers replies from latest Tweet in order of popularity."""
     latest_status = api.user_timeline(count=1, exclude_replies=True)[0]
-    return tweepy.Cursor(api.search, q="to:TextOnlyGameBoy", since_id=latest_status.id, result_type="popular").items()
+    return tweepy.Cursor(api.search, q="to:TextOnlyGameBoy", since_id=latest_status.id, result_type="recent").items()
 
 def update(tweet_image: BinaryIO, profile_image: BinaryIO, text: str = "Image", bio: str = ""):
     """Send a Tweet with an image and optionally update the bio."""
