@@ -1,5 +1,5 @@
-from pyboy import PyBoy, WindowEvent
 from PIL import Image
+from pyboy import PyBoy, WindowEvent
 from argparse import ArgumentParser
 from typing import List
 import twitter_plays_pyboy

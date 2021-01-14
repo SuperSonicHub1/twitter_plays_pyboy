@@ -1,5 +1,5 @@
-from pyboy import PyBoy, WindowEvent
 from PIL import Image
+from pyboy import PyBoy, WindowEvent
 from argparse import ArgumentParser
 from typing import List
 import twitter_plays_pyboy
@@ -14,6 +14,7 @@ parser.add_argument('-V', '--version', action='version', version='%(prog)s ' + t
 
 
 args = parser.parse_args()
+
 
 engine = getattr(twitter_plays_pyboy.games, args.game)
 
